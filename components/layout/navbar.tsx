@@ -18,6 +18,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -318,6 +319,9 @@ export function Navbar({
                     </div>
                     BugTrackerX
                   </SheetTitle>
+                  <SheetDescription className="sr-only">
+                    Navigation Menu
+                  </SheetDescription>
                 </SheetHeader>
                 <div className="flex flex-col gap-6">
                   <div className="flex flex-col gap-3">
