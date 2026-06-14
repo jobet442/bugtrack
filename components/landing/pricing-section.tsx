@@ -114,9 +114,7 @@ export function PricingSection() {
                 </span>
                 {tier.priceMonthly !== "Custom" &&
                   tier.priceMonthly !== "Free" && (
-                    <span
-                      className={`text-sm font-semibold leading-6 ${tier.featured ? "text-background/80" : "text-muted-foreground"}`}
-                    >
+                    <span className="text-sm font-semibold leading-6 text-background/80">
                       /month
                     </span>
                   )}

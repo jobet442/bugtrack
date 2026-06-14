@@ -19,6 +19,14 @@ export const Guest: Story = {
   args: {
     isAuthenticated: false,
   },
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+      navigation: {
+        pathname: "/features",
+      },
+    },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     // Verify guest links are visible
@@ -93,6 +101,12 @@ export const MobileMenuInteraction: Story = {
   },
   parameters: {
     viewport: { defaultViewport: "mobile1" },
+    nextjs: {
+      appDirectory: true,
+      navigation: {
+        pathname: "/features",
+      },
+    },
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
