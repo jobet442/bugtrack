@@ -67,6 +67,23 @@ export function Navbar({
       links.push({ label: "Audit Logs", href: "/audit-logs" });
     }
 
+    // RBAC: Dev-specific links
+    if (userRole === "DEV") {
+      links.push(
+        { label: "Sprints", href: "/sprints" },
+        { label: "Releases", href: "/releases" },
+        { label: "API Docs", href: "/api-docs" },
+      );
+    }
+
+    // RBAC: Only Admin sees Users and Settings
+    if (userRole === "ADMIN") {
+      links.push(
+        { label: "Users", href: "/users" },
+        { label: "Settings", href: "/settings" },
+      );
+    }
+
     return links;
   };
 
@@ -92,7 +109,10 @@ export function Navbar({
 
           {isAuthenticated && orgName && (
             <div className="hidden md:flex items-center gap-2 ml-2">
-              <span className="text-muted-foreground/40 text-lg font-light leading-none">
+              <span
+                className="text-muted-foreground/40 text-lg font-light leading-none"
+                aria-hidden="true"
+              >
                 /
               </span>
               <span className="text-sm font-medium bg-secondary/50 text-secondary-foreground px-2.5 py-1 rounded-md border shadow-sm">
@@ -103,7 +123,7 @@ export function Navbar({
         </div>
 
         {/* Center Section: Desktop Nav Links */}
-        <nav className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8 text-sm font-medium">
+        <nav className="hidden md:flex justify-center items-center gap-4 lg:gap-6 xl:gap-8 text-sm font-medium">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -143,7 +163,10 @@ export function Navbar({
                     className="rounded-full relative"
                   >
                     <Bell className="h-[1.1rem] w-[1.1rem] text-muted-foreground" />
-                    <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-destructive border-2 border-background"></span>
+                    <span
+                      className="absolute top-2 right-2 h-2 w-2 rounded-full bg-destructive border-2 border-background"
+                      aria-hidden="true"
+                    ></span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-80" align="end" forceMount>
@@ -157,7 +180,10 @@ export function Navbar({
                   <div className="max-h-[300px] overflow-y-auto">
                     <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 cursor-pointer focus:bg-muted/50">
                       <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                        <span
+                          className="w-2 h-2 rounded-full bg-blue-500"
+                          aria-hidden="true"
+                        ></span>
                         <span className="font-medium text-sm">
                           Issue assigned to you
                         </span>
@@ -165,14 +191,17 @@ export function Navbar({
                       <p className="text-xs text-muted-foreground pl-4">
                         Sarah Jenkins assigned BUG-142 to you.
                       </p>
-                      <p className="text-[10px] text-muted-foreground pl-4 mt-1">
+                      <p className="text-xs text-muted-foreground pl-4 mt-1">
                         10 minutes ago
                       </p>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 cursor-pointer focus:bg-muted/50">
                       <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                        <span
+                          className="w-2 h-2 rounded-full bg-green-500"
+                          aria-hidden="true"
+                        ></span>
                         <span className="font-medium text-sm">
                           Test Run Completed
                         </span>
@@ -180,22 +209,25 @@ export function Navbar({
                       <p className="text-xs text-muted-foreground pl-4">
                         Release 2.1 UI Regression passed.
                       </p>
-                      <p className="text-[10px] text-muted-foreground pl-4 mt-1">
+                      <p className="text-xs text-muted-foreground pl-4 mt-1">
                         2 hours ago
                       </p>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 cursor-pointer opacity-60 focus:bg-muted/50">
+                    <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 cursor-pointer focus:bg-muted/50">
                       <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-muted"></span>
-                        <span className="font-medium text-sm">
+                        <span
+                          className="w-2 h-2 rounded-full bg-muted"
+                          aria-hidden="true"
+                        ></span>
+                        <span className="font-medium text-sm text-muted-foreground">
                           Mentioned in comment
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground pl-4">
                         David Chen mentioned you in PRJ-99.
                       </p>
-                      <p className="text-[10px] text-muted-foreground pl-4 mt-1">
+                      <p className="text-xs text-muted-foreground pl-4 mt-1">
                         Yesterday
                       </p>
                     </DropdownMenuItem>
@@ -212,6 +244,7 @@ export function Navbar({
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
+                    aria-label="User profile"
                     className="relative h-9 w-9 rounded-full ml-1 ring-offset-background transition-all hover:ring-2 hover:ring-primary/20"
                   >
                     <Avatar className="h-9 w-9 border">
@@ -234,7 +267,10 @@ export function Navbar({
                         </p>
                       )}
                       <p className="text-xs leading-none text-muted-foreground mt-1 capitalize inline-flex items-center">
-                        <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                        <span
+                          className="w-2 h-2 rounded-full bg-green-500 mr-2"
+                          aria-hidden="true"
+                        ></span>
                         {userRole.toLowerCase()} Role
                       </p>
                     </div>
@@ -247,7 +283,7 @@ export function Navbar({
                     Preferences
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-destructive focus:text-destructive cursor-pointer">
+                  <DropdownMenuItem className="text-red-600 dark:text-red-400 focus:bg-red-100 focus:text-red-700 dark:focus:bg-red-900/50 dark:focus:text-red-300 cursor-pointer">
                     Log out
                   </DropdownMenuItem>
                 </DropdownMenuContent>

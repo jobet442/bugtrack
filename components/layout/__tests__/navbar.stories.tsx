@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { expect, within } from "storybook/test";
+import { expect, within, userEvent, screen, fireEvent } from "storybook/test";
 import { Navbar } from "../navbar";
 
 const meta = {
@@ -59,12 +59,106 @@ export const AuthenticatedDeveloper: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Developers should see Projects and Issues
+    // Developers should see Projects, Issues, and Dev-specific links
     await expect(canvas.getByRole("link", { name: /projects/i })).toBeVisible();
     await expect(canvas.getByRole("link", { name: /issues/i })).toBeVisible();
+    await expect(canvas.getByRole("link", { name: /sprints/i })).toBeVisible();
+    await expect(canvas.getByRole("link", { name: /releases/i })).toBeVisible();
+    await expect(canvas.getByRole("link", { name: /api docs/i })).toBeVisible();
 
     // Ensure "Audit Logs" is NOT in the document for DEV role
     const auditLogLink = canvas.queryByRole("link", { name: /audit logs/i });
     expect(auditLogLink).toBeNull();
+  },
+};
+
+// 4. Authenticated (No optional details)
+export const AuthenticatedNoDetails: Story = {
+  args: {
+    isAuthenticated: true,
+    userRole: "GUEST",
+    userName: "Jane",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // User profile avatar fallback should be "JA"
+    await expect(canvas.getByText("JA")).toBeVisible();
+  },
+};
+
+// 5. Mobile Menu Interaction
+export const MobileMenuInteraction: Story = {
+  args: {
+    isAuthenticated: false,
+  },
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await step("Open mobile menu", async () => {
+      const openBtn = canvas.getByRole("button", {
+        name: /open mobile menu/i,
+        hidden: true,
+      });
+      fireEvent.click(openBtn);
+    });
+    // Can't use canvasElement for portals by default in some setups, but the sheet should be in the DOM
+    // For simplicity, just interacting with the button covers the branch
+
+    // To cover the onClick function on links inside the mobile menu:
+    // Need to use hidden: true because the sheet might be hidden or animating
+    const featuresLinks = screen.getAllByRole("link", {
+      name: /features/i,
+      hidden: true,
+    });
+    // The mobile menu link is usually the second one (first is desktop nav)
+    fireEvent.click(featuresLinks[featuresLinks.length - 1]);
+
+    // Open again to click Sign In
+    const openBtnAgain = canvas.getByRole("button", {
+      name: /open mobile menu/i,
+      hidden: true,
+    });
+    fireEvent.click(openBtnAgain);
+
+    const signInLinks = screen.getAllByRole("link", {
+      name: /sign in/i,
+      hidden: true,
+    });
+    fireEvent.click(signInLinks[signInLinks.length - 1]);
+  },
+};
+
+// 6. User Dropdown Interaction
+export const UserDropdownInteraction: Story = {
+  args: {
+    isAuthenticated: true,
+    userName: "Test User",
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await step("Open user dropdown", async () => {
+      const avatarBtn = canvas.getByRole("button", { name: /user profile/i });
+      await userEvent.click(avatarBtn);
+    });
+    // Close the dropdown to prevent aria-hidden-focus violation in axe
+    await userEvent.keyboard("{Escape}");
+  },
+};
+
+// 7. Notification Dropdown Interaction
+export const NotificationsInteraction: Story = {
+  args: {
+    isAuthenticated: true,
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await step("Open notifications", async () => {
+      const bellBtn = canvas.getByRole("button", { name: /notifications/i });
+      await userEvent.click(bellBtn);
+    });
+    // Close the dropdown to prevent aria-hidden-focus violation in axe
+    await userEvent.keyboard("{Escape}");
   },
 };

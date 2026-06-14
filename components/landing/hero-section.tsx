@@ -16,7 +16,7 @@ export function HeroSection() {
 
         <h1 className="mx-auto max-w-4xl text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-8xl">
           Ship software with{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
             absolute confidence.
           </span>
         </h1>
