@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { expect } from "storybook/test";
+import { expect, within } from "storybook/test";
 import { Navbar } from "../navbar";
 
 const meta = {
@@ -19,7 +19,8 @@ export const Guest: Story = {
   args: {
     isAuthenticated: false,
   },
-  play: async ({ canvas }) => {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
     // Verify guest links are visible
     await expect(canvas.getByRole("link", { name: /features/i })).toBeVisible();
     await expect(canvas.getByRole("link", { name: /pricing/i })).toBeVisible();
@@ -37,7 +38,8 @@ export const AuthenticatedAdmin: Story = {
     userEmail: "jane@bugtrackerx.com",
     orgName: "Acme Corp",
   },
-  play: async ({ canvas }) => {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
     // Admins should see the "Audit Logs" route
     await expect(
       canvas.getByRole("link", { name: /audit logs/i }),
@@ -55,7 +57,8 @@ export const AuthenticatedDeveloper: Story = {
     userName: "John Dev",
     userEmail: "john@bugtrackerx.com",
   },
-  play: async ({ canvas }) => {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
     // Developers should see Projects and Issues
     await expect(canvas.getByRole("link", { name: /projects/i })).toBeVisible();
     await expect(canvas.getByRole("link", { name: /issues/i })).toBeVisible();
